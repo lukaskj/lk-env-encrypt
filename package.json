@@ -9,7 +9,13 @@
     "lint": "tsc -p . --noEmit && biome lint --write",
     "format": "biome format --write",
     "test:cov": "bun run test --coverage",
-    "test": "bun test --env-file .env.test"
+    "test": "bun test --env-file .env.test",
+    "build:all": "rm -rf build && bun run build:win && bun run build:linux && bun run build:arm && bun run build:darwin && bun run build:darwin-arm",
+    "build:win": "bun build --compile --minify --sourcemap --target=bun-windows-x64-modern ./src/index.ts --outfile build/lk-env-encrypt-win.exe",
+    "build:linux": "bun build --compile --minify --sourcemap --target=bun-linux-x64-modern ./src/index.ts --outfile build/lk-env-encrypt-linux",
+    "build:arm": "bun build --compile --minify --sourcemap --target=bun-linux-arm64 ./src/index.ts --outfile build/lk-env-encrypt-linux-arm64",
+    "build:darwin": "bun build --compile --minify --sourcemap --target=bun-darwin-x64 ./src/index.ts --outfile build/lk-env-encrypt-darwin",
+    "build:darwin-arm": "bun build --compile --minify --sourcemap --target=bun-darwin-arm64 ./src/index.ts --outfile build/lk-env-encrypt-darwin-arm64"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
