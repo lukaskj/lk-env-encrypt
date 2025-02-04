@@ -7,6 +7,10 @@ const options = {
   },
   password: {
     type: "string",
+    short: "p",
+  },
+  pipe: {
+    type: "boolean",
   },
   help: {
     type: "boolean",

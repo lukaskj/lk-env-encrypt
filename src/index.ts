@@ -61,7 +61,14 @@ if (!isEncrypt && fileData[IDENTIFIER.KEY]) {
   delete fileData[IDENTIFIER.KEY];
 }
 
-const outputFilePath = options.output ?? `out.${fileType}`;
 const outputFileContents = fileType === "json" ? JSON.stringify(fileData, null, 2) : yaml.dump(fileData, { indent: 2 });
 
-await Bun.file(outputFilePath).write(outputFileContents);
+if (options.pipe) {
+  console.log(outputFileContents);
+} else {
+  const outputFilePath = options.output ?? inputFilePath;
+
+  await Bun.file(outputFilePath).write(outputFileContents);
+}
+
+process.exit(0);
