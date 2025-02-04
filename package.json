@@ -24,9 +24,16 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.13.0",
     "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
     "typescript": "^5.7.3"
   },
   "dependencies": {
     "js-yaml": "^4.1.0"
+  },
+  "lint-staged": {
+    "*": [
+      "bun run lint",
+      "bun run format"
+    ]
   }
 }

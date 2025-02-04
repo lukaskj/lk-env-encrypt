@@ -16,6 +16,9 @@ const options = {
     type: "boolean",
     short: "h",
   },
+  export: {
+    type: "string",
+  },
 } satisfies ParseArgsConfig["options"];
 
 export function parseOptions(args: string[]) {
@@ -26,11 +29,10 @@ export function parseOptions(args: string[]) {
     allowPositionals: true,
   });
 
-  // biome-ignore lint/style/noNonNullAssertion: <explanation>
   return parsed!;
 }
+export type TOptions = ReturnType<typeof parseOptions>["values"];
 
 export function showHelp() {
   console.log("Usage");
-  process.exit(0);
 }

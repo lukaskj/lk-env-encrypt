@@ -31,7 +31,8 @@
         "noUnusedVariables": "warn"
       },
       "style": {
-        "noInferrableTypes": "off"
+        "noInferrableTypes": "off",
+        "noNonNullAssertion": "off"
       },
       "complexity": {
         "noStaticOnlyClass": "off",
