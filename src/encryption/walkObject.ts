@@ -1,10 +1,9 @@
-import type { FileContents, TEncryptFnc } from "../types";
+import type { AnyType, FileContents, TEncryptFnc } from "../types";
 
 export function walkObject(data: FileContents, password: string, fnc: TEncryptFnc): void {
   walkObjectDfs(data, undefined, fnc);
 
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  function walkObjectDfs(data: any, key: string | undefined, fnc: TEncryptFnc) {
+  function walkObjectDfs(data: AnyType, key: string | undefined, fnc: TEncryptFnc) {
     const stack = [[data, key]];
 
     while (stack.length) {

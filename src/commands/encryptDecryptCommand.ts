@@ -1,4 +1,3 @@
-import yaml from "js-yaml";
 import { IDENTIFIER } from "../encryption/consts";
 import { decryptCustomData } from "../encryption/decryptCustomData";
 import { encryptCustomData } from "../encryption/encryptCustomData";
@@ -15,13 +14,7 @@ type EncryptCommandArgs = {
   isEncrypt: boolean;
 };
 
-export async function encryptDecryptCommand({
-  fileData,
-  fileType,
-  inputFilePath,
-  options,
-  isEncrypt,
-}: EncryptCommandArgs): Promise<number> {
+export async function encryptDecryptCommand({ fileData, options, isEncrypt }: EncryptCommandArgs): Promise<number> {
   const walkFnc: TEncryptFnc = isEncrypt ? encryptCustomData : decryptCustomData;
 
   fileData[IDENTIFIER.KEY] = isEncrypt ? IDENTIFIER.RAW_VALUE : fileData[IDENTIFIER.KEY];
@@ -36,17 +29,6 @@ export async function encryptDecryptCommand({
 
   if (!isEncrypt && fileData[IDENTIFIER.KEY]) {
     delete fileData[IDENTIFIER.KEY];
-  }
-
-  const outputFileContents =
-    fileType === "json" ? JSON.stringify(fileData, null, 2) : yaml.dump(fileData, { indent: 2 });
-
-  if (options.pipe) {
-    console.log(outputFileContents);
-  } else {
-    const outputFilePath = options.output ?? inputFilePath;
-
-    await Bun.file(outputFilePath).write(outputFileContents);
   }
 
   return 0;

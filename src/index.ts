@@ -7,6 +7,9 @@ import { getFileType } from "./utils/getFileType";
 import { parseOptions, showHelp } from "./utils/parseOptions";
 import { readPasswordInput } from "./utils/readPasswordInput";
 import { validateInputOptions } from "./validateInputOptions";
+import { saveFileCommand } from "./commands/saveFileCommand";
+
+type TCommand = () => number | Promise<number>;
 
 async function main(args: string[]): Promise<number> {
   const parsedArgs = parseOptions(args);
@@ -41,13 +44,32 @@ async function main(args: string[]): Promise<number> {
     return 1;
   }
 
-  return await encryptDecryptCommand({
-    fileData,
-    fileType,
-    inputFilePath,
-    isEncrypt,
-    options,
-  });
+  const commands: TCommand[] = [
+    async () =>
+      await encryptDecryptCommand({
+        fileData,
+        fileType,
+        inputFilePath,
+        isEncrypt,
+        options,
+      }),
+    async () =>
+      await saveFileCommand({
+        fileData,
+        inputFilePath,
+        fileType,
+        options,
+      }),
+  ];
+
+  for (const command of commands) {
+    const result = await command();
+    if (result !== 0) {
+      return result;
+    }
+  }
+
+  return 0;
 }
 
 let exitCode = 0;

@@ -1,8 +1,8 @@
+import type { AnyType } from "../types";
 import { SEPARATOR } from "./consts";
 import { decrypt } from "./encryption";
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export function decryptCustomData(value: string, password: string): any {
+export function decryptCustomData(value: string, password: string): AnyType {
   const data = value.split(SEPARATOR);
   const valueType = data[1]?.toLowerCase();
   const encryptedValue = data[0];
