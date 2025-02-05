@@ -1,22 +1,30 @@
-# @lukaskj/bun-base-template
+# @lukaskj/lk-env-encrypt
 
-Template for [Bun](https://bun.sh/) projects.
+Util to encrypt/decrypt json/yaml/dotenv files values, keeping it's keys.
+
+Inspired by [sops](https://github.com/getsops/sops) and [env-vault](https://github.com/romantomjak/env-vault)
+
+_Note: this project was created for study purposes, not intented to be used in production or to be used as the only reliable tool._
 
 ## Usage
 
 ```bash
-git clone --depth=1 https://github.com/lukaskj/bun-base-template example-project
-cd example-project/
+$ ./lk-env-encrypt -h
 
-rm -rf .git
-git init
-bun install
+Usage:  bun.exe src/index.ts [options] <inputFile>
 
-# Replace package name in package.json file
-sed -i s#@lukaskj/bun-base-template#$(basename "$PWD")#g package.json
+Encrypt, decrypts and exports configuration files.
 
-git add .
-git commit -m 'initial commit'
+Arguments:
+  inputFile                  Input file to encrypt/decrypt. (Required)
+
+Options:
+  --output, -o <output>      Output file
+  --password, -p <password>  Password to encrypt/decrypt contents (will prompt if not set)
+  --inPlace, -i              Encrypt/decrypt file in-place, replacing it's contents (default: false)
+  --export <export>          Export format. Valid formats: json,yaml,env
+  --keys, -k <keys>          Comma separated keys to be exported
+  --help, -h                 Show this help
 ```
 
 ## Commands:
@@ -27,8 +35,4 @@ git commit -m 'initial commit'
 - `bun run test`: Run test files from `test` folder.
 - `bun run test:cov`: Run tests with coverage.
 
-## Dependencies:
 
-- [husky](https://typicode.github.io/husky/)
-- [@biomejs/biome](https://github.com/biomejs/biome)
-- [@faker-js/faker](https://fakerjs.dev/)
