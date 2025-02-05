@@ -1,6 +1,6 @@
 import type { TExportType } from "../consts";
 import type { FileContents } from "../types";
-import { getObjectValuesByKeys } from "../utils/getObjectValuesByKeys";
+import { filterObjectValuesByKeys } from "../utils/filterObjectValuesByKeys";
 import { serializeObjectToFormat } from "../utils/serializeObjectToFormat";
 
 type TArgs = {
@@ -20,7 +20,7 @@ export async function saveFileCommand({
   outputFileName,
   keysToExport,
 }: TArgs): Promise<number> {
-  const dataToSave = getObjectValuesByKeys(fileData, keysToExport);
+  const dataToSave = filterObjectValuesByKeys(fileData, keysToExport);
 
   const outputFileContents = serializeObjectToFormat(dataToSave, exportFileType);
 

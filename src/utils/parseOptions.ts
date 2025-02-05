@@ -1,7 +1,7 @@
 import { basename } from "node:path";
 import { type ParseArgsConfig, parseArgs } from "node:util";
 import { VALID_EXPORT_TYPES } from "../consts";
-import type { AnyType } from "../types";
+import type { TOptions } from "../types";
 
 const options = {
   output: {
@@ -19,6 +19,10 @@ const options = {
   export: {
     type: "string",
   },
+  keys: {
+    type: "string",
+    short: "k",
+  },
   help: {
     type: "boolean",
     short: "h",
@@ -33,7 +37,9 @@ export function parseOptions(args: string[]) {
     allowPositionals: true,
   });
 
-  (<AnyType>parsed.values).pipe = !parsed.values.inPlace && !parsed.values.output?.trim();
+  (<TOptions>parsed.values).pipe = !parsed.values.inPlace && !parsed.values.output?.trim();
+
+  (<TOptions>parsed.values).keysToExport = parsed.values.keys?.trim() ? parsed.values.keys.split(",") : [];
 
   return parsed!;
 }
@@ -45,6 +51,7 @@ const optionsDescriptions: Record<keyof TRawOptions, string> = {
   output: "Output file",
   password: "Password to encrypt/decrypt contents (will prompt if not set)",
   inPlace: "Encrypt/decrypt file in-place, replacing it's contents (default: false)",
+  keys: "Comma separated keys to be exported",
 };
 
 export function showHelp() {

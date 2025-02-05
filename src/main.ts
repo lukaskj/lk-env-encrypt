@@ -67,6 +67,7 @@ export async function main(args: string[]): Promise<number> {
         exportFileType,
         outputFileName: options.output,
         pipeOutput: options.pipe,
+        keysToExport: options.keysToExport,
       }),
   ];
 

@@ -13,6 +13,7 @@ export type TOptions = {
   inPlace: boolean;
   pipe: boolean;
   help: boolean;
+  keysToExport: string[];
 };
 
 export type TArguments = {
