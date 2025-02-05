@@ -10,6 +10,7 @@ export type TOptions = {
   output?: string;
   export?: TExportType;
   password?: string;
+  inPlace: boolean;
   pipe: boolean;
   help: boolean;
 };

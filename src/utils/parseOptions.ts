@@ -10,8 +10,9 @@ const options = {
     type: "string",
     short: "p",
   },
-  pipe: {
+  inPlace: {
     type: "boolean",
+    short: "i",
   },
   help: {
     type: "boolean",
@@ -39,7 +40,7 @@ const optionsDescriptions: Record<keyof TRawOptions, string> = {
   help: "Show this help",
   output: "Output file",
   password: "Password to encrypt/decrypt contents (will prompt if not set)",
-  pipe: "Pipe output to console (default: false)",
+  inPlace: "Replace file in-place (default: false)",
 };
 
 export function showHelp() {

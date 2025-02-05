@@ -1,5 +1,5 @@
 import { VALID_EXPORT_TYPES } from "./consts";
-import type { TArguments } from "./types";
+import type { AnyType, TArguments } from "./types";
 import { isValidTransformType } from "./utils/isValidTransformType";
 import type { parseOptions } from "./utils/parseOptions";
 
@@ -14,10 +14,12 @@ export function validateInputOptions(args: ReturnType<typeof parseOptions>): arg
       throw new Error(`Export type not valid. Expected values: ${VALID_EXPORT_TYPES.join()}`);
     }
 
-    if ((!options.output || options.output.trim() === "") && !options.pipe) {
-      throw new Error("Output file or pipe options expected when the export flag is defined.");
+    if ((!options.output || options.output.trim() === "") && options.inPlace) {
+      throw new Error("Output file expected when the export flag is defined.");
     }
   }
+
+  (<AnyType>options).pipe = !options.inPlace;
 
   return true;
 }
