@@ -1,4 +1,6 @@
 import { main } from "./main";
+import { registerGracefulShutdown } from "./utils/graceful";
+registerGracefulShutdown();
 
 let exitCode = 0;
 try {

@@ -9,12 +9,18 @@ export async function readPasswordInput(): Promise<string | undefined> {
   if (input.isTTY) input.setRawMode(true);
   const rl = createInterface(input, output);
 
-  try {
-    process.stdin.on("keypress", () => {
+  rl.on("SIGINT", function () {
+    process.emit("SIGINT");
+  });
+
+  process.stdin.on("keypress", (_, key) => {
+    if (!key.ctrl) {
       moveCursor(output, -1, 0);
       clearLine(output, 1);
-    });
+    }
+  });
 
+  try {
     const pass = await rl.question("Password: ");
 
     return pass;
