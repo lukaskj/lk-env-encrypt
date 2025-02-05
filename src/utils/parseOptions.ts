@@ -1,5 +1,6 @@
 import { basename } from "node:path";
 import { type ParseArgsConfig, parseArgs } from "node:util";
+import { VALID_EXPORT_TYPES } from "../consts";
 
 const options = {
   output: {
@@ -14,12 +15,12 @@ const options = {
     type: "boolean",
     short: "i",
   },
+  export: {
+    type: "string",
+  },
   help: {
     type: "boolean",
     short: "h",
-  },
-  export: {
-    type: "string",
   },
 } satisfies ParseArgsConfig["options"];
 
@@ -36,11 +37,11 @@ export function parseOptions(args: string[]) {
 export type TRawOptions = ReturnType<typeof parseOptions>["values"];
 
 const optionsDescriptions: Record<keyof TRawOptions, string> = {
-  export: "Export format",
+  export: `Export format. Valid formats: ${VALID_EXPORT_TYPES.join(",")}`,
   help: "Show this help",
   output: "Output file",
   password: "Password to encrypt/decrypt contents (will prompt if not set)",
-  inPlace: "Replace file in-place (default: false)",
+  inPlace: "Encrypt/decrypt file in-place, replacing it's contents (default: false)",
 };
 
 export function showHelp() {
@@ -78,20 +79,3 @@ export function showHelp() {
     console.log(opt[0].padEnd(firstColumnMaxLen + 1, " "), opt[1]);
   }
 }
-
-/*
-Usage: syncr [options] <scenarios...>
-
-Automation tool to help configure and orchestrate remotely via ssh using configuration files.
-
-Arguments:
-  scenarios                 Scenarios to sync
-
-Options:
-  -s, --serversFile <file>  Servers file (default: "servers.yaml")
-  -h, --hosts <hosts>       Run only in specified comma-separated hosts groups
-  -d, --debug               Debug mode (default: false)
-  -v, --verbose             Verbose (default: false)
-  -V, --version             output the version number
-  --help                    display help for command
-*/
