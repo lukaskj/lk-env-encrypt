@@ -42,7 +42,7 @@ export function fromDotEnv(contents: string): FileContents {
       }
     }
 
-    result[key] = value;
+    result[key.toLowerCase()] = value;
   }
 
   return result;
