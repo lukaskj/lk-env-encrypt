@@ -1,13 +1,12 @@
-import yaml from "js-yaml";
 import assert from "node:assert";
 import { encryptDecryptCommand } from "./commands/encryptDecryptCommand";
+import { saveFileCommand } from "./commands/saveFileCommand";
 import { isEncryptingFile } from "./encryption/isEncryptingFile";
-import type { FileContents } from "./types";
 import { getFileType } from "./utils/getFileType";
+import { loadFileByType } from "./utils/loadFileByType";
 import { parseOptions, showHelp } from "./utils/parseOptions";
 import { readPasswordInput } from "./utils/readPasswordInput";
 import { validateInputOptions } from "./validateInputOptions";
-import { saveFileCommand } from "./commands/saveFileCommand";
 
 type TCommand = () => number | Promise<number>;
 
@@ -30,11 +29,17 @@ export async function main(args: string[]): Promise<number> {
   const file = Bun.file(inputFilePath);
   assert(await file.exists(), `File '${inputFilePath}' not found.`);
 
+  const stats = await file.stat();
+  assert(
+    stats.isFile() && !stats.isSymbolicLink() && !stats.isBlockDevice() && !stats.isSocket(),
+    `'${inputFilePath}' is not a file.`,
+  );
+
   const fileType = getFileType(file.type);
   const exportFileType = options.export ?? fileType;
 
   const fileContents = await file.text();
-  const fileData: FileContents = fileType === "json" ? JSON.parse(fileContents) : yaml.load(fileContents);
+  const fileData = loadFileByType(fileContents, fileType);
 
   const isEncrypt = isEncryptingFile(fileContents);
 

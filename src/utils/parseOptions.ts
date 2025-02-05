@@ -1,6 +1,7 @@
 import { basename } from "node:path";
 import { type ParseArgsConfig, parseArgs } from "node:util";
 import { VALID_EXPORT_TYPES } from "../consts";
+import type { AnyType } from "../types";
 
 const options = {
   output: {
@@ -31,6 +32,8 @@ export function parseOptions(args: string[]) {
     strict: true,
     allowPositionals: true,
   });
+
+  (<AnyType>parsed.values).pipe = !parsed.values.inPlace && !parsed.values.output?.trim();
 
   return parsed!;
 }

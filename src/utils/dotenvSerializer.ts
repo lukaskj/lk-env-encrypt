@@ -22,3 +22,28 @@ export function flatObjectToDotEnv(input: object, result: string[]) {
     }
   }
 }
+
+export function fromDotEnv(contents: string): FileContents {
+  const result: Record<string, string> = {};
+
+  const lines = contents.split("\n");
+
+  for (const line of lines) {
+    const equalIndex = line.indexOf("=");
+    const key = line.substring(0, equalIndex);
+    let value = line.substring(equalIndex + 1);
+
+    if (value.length) {
+      if (value[0] === '"') {
+        value = value.substring(1);
+      }
+      if (value.at(-1) === '"') {
+        value = value.substring(0, value.length - 1);
+      }
+    }
+
+    result[key] = value;
+  }
+
+  return result;
+}
