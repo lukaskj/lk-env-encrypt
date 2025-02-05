@@ -4,4 +4,7 @@ telemetry = false
 root = "./test"
 preload = ["./test/test-setup.ts"]
 coverageSkipTestFiles = true
+coverageIgnoreSourcemaps = true
+coverageReporter  = ["text", "lcov"]
+coverageDir = "coverage"
 coverageThreshold = { line = 0.8, function = 0.8, statement = 0.8 }
