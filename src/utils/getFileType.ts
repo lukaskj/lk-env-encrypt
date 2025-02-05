@@ -1,5 +1,4 @@
-import { FILE_TYPE_TO_INTERNAL_TYPE, VALID_FILE_TYPES } from "../consts";
-import type { ParseableType } from "../types";
+import { FILE_TYPE_TO_INTERNAL_TYPE, type ParseableType, VALID_FILE_TYPES } from "../consts";
 
 export function getFileType(fileType: string): ParseableType {
   const validType = VALID_FILE_TYPES.find((validType) => fileType.toLowerCase().startsWith(validType));

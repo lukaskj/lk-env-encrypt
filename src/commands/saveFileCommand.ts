@@ -1,20 +1,33 @@
-import type { FileContents, ParseableType } from "../types";
-import type { TOptions } from "../utils/parseOptions";
-import { transformObjectToFormat } from "../utils/transformObjectToFormat";
+import type { TExportType } from "../consts";
+import type { FileContents } from "../types";
+import { getObjectValuesByKeys } from "../utils/getObjectValuesByKeys";
+import { serializeObjectToFormat } from "../utils/serializeObjectToFormat";
 
 type TArgs = {
-  fileType: ParseableType;
+  exportFileType: TExportType;
   fileData: FileContents;
-  options: TOptions;
   inputFilePath: string;
+  outputFileName?: string;
+  pipeOutput?: boolean;
+  keysToExport?: string[];
 };
-export async function saveFileCommand({ fileData, fileType, options, inputFilePath }: TArgs): Promise<number> {
-  const outputFileContents = transformObjectToFormat(fileData, fileType);
 
-  if (options.pipe) {
+export async function saveFileCommand({
+  fileData,
+  exportFileType,
+  pipeOutput,
+  inputFilePath,
+  outputFileName,
+  keysToExport,
+}: TArgs): Promise<number> {
+  const dataToSave = getObjectValuesByKeys(fileData, keysToExport);
+
+  const outputFileContents = serializeObjectToFormat(dataToSave, exportFileType);
+
+  if (pipeOutput) {
     console.log(outputFileContents);
   } else {
-    const outputFilePath = options.output ?? inputFilePath;
+    const outputFilePath = outputFileName ?? inputFilePath;
 
     await Bun.file(outputFilePath).write(outputFileContents);
   }

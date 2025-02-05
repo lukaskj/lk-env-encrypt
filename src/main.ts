@@ -15,19 +15,23 @@ export async function main(args: string[]): Promise<number> {
   const parsedArgs = parseOptions(args);
   assert(parsedArgs !== undefined && parsedArgs !== null);
 
-  const { values: options, positionals } = parsedArgs;
-  if (options.help) {
+  if (parsedArgs?.values?.help) {
     showHelp();
     return 0;
   }
 
-  validateInputOptions(parsedArgs);
+  if (!validateInputOptions(parsedArgs)) {
+    return 0;
+  }
+
+  const { values: options, positionals } = parsedArgs;
 
   const inputFilePath = positionals[0];
   const file = Bun.file(inputFilePath);
   assert(await file.exists(), `File '${inputFilePath}' not found.`);
 
   const fileType = getFileType(file.type);
+  const exportFileType = options.export ?? fileType;
 
   const fileContents = await file.text();
   const fileData: FileContents = fileType === "json" ? JSON.parse(fileContents) : yaml.load(fileContents);
@@ -38,7 +42,7 @@ export async function main(args: string[]): Promise<number> {
     options.password = await readPasswordInput();
   }
 
-  if (!options.password || typeof options.password === "undefined") {
+  if (!options.password || typeof options.password === "undefined" || options.password === undefined) {
     console.error("No password.");
 
     return 1;
@@ -48,17 +52,16 @@ export async function main(args: string[]): Promise<number> {
     async () =>
       await encryptDecryptCommand({
         fileData,
-        fileType,
-        inputFilePath,
         isEncrypt,
-        options,
+        password: options.password!,
       }),
     async () =>
       await saveFileCommand({
         fileData,
         inputFilePath,
-        fileType,
-        options,
+        exportFileType,
+        outputFileName: options.output,
+        pipeOutput: options.pipe,
       }),
   ];
 
